@@ -1,0 +1,59 @@
+name: "Setup Drupal Spoons"
+author: wunderwerkio
+description: "Setup drupal installation with the drupal spoons composer plugin"
+
+branding:
+  color: "blue"
+  icon: "droplet"
+
+inputs:
+  drupal-core-constraint:
+    description: "Drupal Core version constraint"
+    default: "^10"
+    required: false
+  drupal-spoons-plugin-constraint:
+    description: "Drupal Spoons composer plugin version constraint"
+    default: "^2"
+    required: false
+  drupal-spoons-plugin-prepare:
+    description: "For skipping codebase symlink step"
+    default: true
+    required: false
+  drupal-web-root:
+    description: "Root directory for drupal installation"
+    default: "web"
+    required: false
+  drupal-web-port:
+    description: "Listen port for local drupal installation"
+    required: false
+    default: 9000
+  drupal-simpletest-base-url:
+    description: "Drupal Simpletest base url"
+    required: false
+    default: http://localhost
+  drupal-simpletest-db:
+    description: "Drupal Simpletest Database URI"
+    required: false
+    default: sqlite://localhost/sites/default/files/.sqlite
+
+outputs:
+  drupal-version:
+    description: "Drupal core version constraint"
+
+runs:
+  using: "composite"
+  steps:
+    - id: drupal_spoons_setup
+      shell: bash
+      run: |
+        bash <(curl -s https://gitlab.com/drupalspoons/composer-plugin/-/raw/master/bin/setup)
+        echo "name=drupal-version::${{ inputs.drupal-core-constraint }}" >> $GITHUB_OUTPUT
+      env:
+        DRUPAL_CORE_CONSTRAINT: ${{ inputs.drupal-core-constraint }}
+        COMPOSER_PLUGIN_CONSTRAINT: ${{ inputs.drupal-spoons-plugin-constraint }}
+        COMPOSER_PLUGIN_PREPARE: ${{ inputs.drupal-spoons-plugin-prepare }}
+        WEB_ROOT: ${{ inputs.drupal-web-root }}
+        WEB_PORT: ${{ inputs.drupal-web-port }}
+        SIMPLETEST_BASE_URL: ${{ inputs.drupal-simpletest-base-url }}
+        SIMPLETEST_DB: ${{ inputs.drupal-simpletest-db }}
+        NONINTERACTIVE: "1"
