@@ -35,6 +35,10 @@ inputs:
     description: "Drupal Simpletest Database URI"
     required: false
     default: sqlite://localhost/sites/default/files/.sqlite
+  update-composer-env:
+    description: "Whether the COMPOSER env variable should be set to composer.spoons.json"
+    required: false
+    default: true
 
 outputs:
   drupal-version:
@@ -57,3 +61,9 @@ runs:
         SIMPLETEST_BASE_URL: ${{ inputs.drupal-simpletest-base-url }}
         SIMPLETEST_DB: ${{ inputs.drupal-simpletest-db }}
         NONINTERACTIVE: "1"
+
+    - id: drupal_spoons_set_env
+      shell: bash
+      if: inputs.update-composer-env == true
+      run: |
+        echo "COMPOSER=composer.spoons.json" >> $GITHUB_ENV
