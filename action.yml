@@ -50,7 +50,10 @@ runs:
     - id: drupal_spoons_setup
       shell: bash
       run: |
+        echo "::group::Install and Setup Drupal ${{ inputs.drupal-core-constraint }}"
         bash <(curl -s https://gitlab.com/drupalspoons/composer-plugin/-/raw/master/bin/setup)
+        echo "::endgroup::"
+
         echo "name=drupal-version::${{ inputs.drupal-core-constraint }}" >> $GITHUB_OUTPUT
       env:
         DRUPAL_CORE_CONSTRAINT: ${{ inputs.drupal-core-constraint }}
@@ -64,6 +67,6 @@ runs:
 
     - id: drupal_spoons_set_env
       shell: bash
-      if: inputs.update-composer-env == true
+      if: inputs.update-composer-env == 'true'
       run: |
         echo "COMPOSER=composer.spoons.json" >> $GITHUB_ENV
