@@ -54,6 +54,12 @@ runs:
         bash <(curl -s https://gitlab.com/drupalspoons/composer-plugin/-/raw/master/bin/setup)
         echo "::endgroup::"
 
+        # Set env for future steps.
+        echo "WEB_ROOT=$WEB_ROOT" >> $GITHUB_ENV
+        echo "WEB_PORT=$WEB_PORT" >> $GITHUB_ENV
+        echo "SIMPLETEST_BASE_URL=$SIMPLETEST_BASE_URL" >> $GITHUB_ENV
+        echo "SIMPLETEST_DB=$SIMPLETEST_DB" >> $GITHUB_ENV
+
         echo "name=drupal-version::${{ inputs.drupal-core-constraint }}" >> $GITHUB_OUTPUT
       env:
         DRUPAL_CORE_CONSTRAINT: ${{ inputs.drupal-core-constraint }}
