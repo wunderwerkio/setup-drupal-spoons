@@ -34,7 +34,7 @@ inputs:
   drupal-simpletest-db:
     description: "Drupal Simpletest Database URI"
     required: false
-    default: sqlite://localhost/sites/default/files/.sqlite
+    default: sqlite://localhost/.sqlite
   update-composer-env:
     description: "Whether the COMPOSER env variable should be set to composer.spoons.json"
     required: false
